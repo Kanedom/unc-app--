@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Union Health Clinic — Dr. Kenneth Maima</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#0D5B8F;--blue2:#27A2E0;--green:#68B44B;--gray:#444;--lgray:#E6E6E6;--white:#fff;--bg:#f0f4f8;--radius:12px;--rsm:8px}
+body{font-family:'Poppins',sans-serif;background:var(--bg);min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:20px}
+.app{width:100%;max-width:820px;background:var(--white);border-radius:18px;overflow:hidden;box-shadow:0 4px 30px rgba(0,0,0,0.10)}
+
+/* TOPBAR */
+.topbar{background:var(--blue);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
+.topbar-brand{display:flex;align-items:center;gap:14px}
+.topbar-logo{width:42px;height:42px;border-radius:50%;background:var(--blue2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.topbar-title{font-size:16px;font-weight:700;letter-spacing:0.3px}
+.topbar-sub{font-size:11px;opacity:0.75;margin-top:1px}
+.topbar-date{font-size:12px;opacity:0.8;text-align:right}
+
+/* NAV */
+.nav{display:flex;background:var(--white);border-bottom:1px solid var(--lgray)}
+.nav-item{flex:1;padding:14px 8px 12px;text-align:center;cursor:pointer;font-size:11px;color:#999;border-bottom:3px solid transparent;transition:all 0.15s;font-weight:500}
+.nav-item:hover{color:var(--blue2)}
+.nav-item.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+.nav-icon{font-size:22px;display:block;margin-bottom:3px}
+
+/* CONTENT */
+.content{padding:24px;min-height:520px;background:var(--bg)}
+.page{display:none}.page.active{display:block}
+
+/* SECTION HEADER */
+.sec-hdr{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.sec-hdr::after{content:'';flex:1;height:1px;background:var(--lgray)}
+
+/* CARDS */
+.card{background:var(--white);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px;border:1px solid #e8edf3;transition:box-shadow 0.15s}
+.card:hover{box-shadow:0 2px 12px rgba(13,91,143,0.08)}
+.card-clickable{cursor:pointer}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--white);border-radius:var(--radius);padding:16px;text-align:center;border:1px solid #e8edf3}
+.stat-num{font-size:28px;font-weight:700;color:var(--blue);line-height:1}
+.stat-lbl{font-size:11px;color:#999;margin-top:4px;font-weight:500}
+
+/* QUICK ACTIONS */
+.qa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.qa-btn{background:var(--white);border:1px solid #e8edf3;border-radius:var(--radius);padding:18px 12px;cursor:pointer;text-align:center;transition:all 0.15s}
+.qa-btn:hover{border-color:var(--blue2);background:#f0f7ff;transform:translateY(-1px)}
+.qa-btn svg{width:28px;height:28px;color:var(--blue);margin:0 auto 8px;display:block}
+.qa-btn-lbl{font-size:12px;font-weight:600;color:var(--gray)}
+
+/* BADGES */
+.badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;display:inline-block;white-space:nowrap}
+.badge-blue{background:#e6f4fd;color:#0a4a75}
+.badge-green{background:#eaf6e2;color:#2e6b1f}
+.badge-red{background:#fdeaea;color:#a82424}
+.badge-amber{background:#fef6e4;color:#7a5200}
+.badge-gray{background:#f0f0f0;color:#555}
+
+/* AVATAR */
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0}
+
+/* PATIENT ROW */
+.pt-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid #f0f0f0}
+.pt-row:last-child{border-bottom:none}
+.pt-info{flex:1}
+.pt-name{font-size:14px;font-weight:600;color:var(--gray)}
+.pt-sub{font-size:12px;color:#999;margin-top:2px}
+
+/* APPT ITEM */
+.appt-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid #f0f0f0}
+.appt-item:last-child{border-bottom:none}
+.appt-box{background:var(--blue);color:#fff;border-radius:var(--rsm);width:48px;text-align:center;padding:6px 0;flex-shrink:0}
+.appt-day{font-size:20px;font-weight:700;line-height:1}
+.appt-mon{font-size:9px;text-transform:uppercase;letter-spacing:0.5px;opacity:0.85}
+.appt-info{flex:1}
+.appt-name{font-size:13px;font-weight:600;color:var(--gray)}
+.appt-detail{font-size:11px;color:#999;margin-top:2px}
+
+/* FINANCE */
+.fin-banner{background:var(--blue);border-radius:var(--radius);padding:22px;color:#fff;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.fin-left{}
+.fin-lbl{font-size:11px;opacity:0.8;margin-bottom:4px;font-weight:500}
+.fin-total{font-size:32px;font-weight:700}
+.fin-minis{display:flex;gap:12px;margin-top:14px}
+.fin-mini{background:rgba(255,255,255,0.15);border-radius:var(--rsm);padding:10px 14px}
+.fin-mini-num{font-size:16px;font-weight:700}
+.fin-mini-lbl{font-size:10px;opacity:0.8;margin-top:1px}
+.txn-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #f0f0f0}
+.txn-row:last-child{border-bottom:none}
+.txn-name{font-size:13px;font-weight:600;color:var(--gray)}
+.txn-sub{font-size:11px;color:#999;margin-top:1px}
+.txn-amt{font-size:14px;font-weight:700}
+.txn-pos{color:#2e6b1f}.txn-neg{color:#a82424}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:14px}
+.search-wrap input{width:100%;padding:10px 14px 10px 40px;border-radius:var(--rsm);border:1px solid #dde3ec;background:var(--white);font-size:13px;color:var(--gray);outline:none;font-family:'Poppins',sans-serif}
+.search-wrap input:focus{border-color:var(--blue2)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#aaa;font-size:16px}
+
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.form-grp{margin-bottom:14px}
+.form-lbl{font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.6px;display:block;margin-bottom:5px}
+.form-inp{width:100%;padding:10px 12px;border-radius:var(--rsm);border:1px solid #dde3ec;font-size:13px;color:var(--gray);outline:none;font-family:'Poppins',sans-serif;background:var(--white)}
+.form-inp:focus{border-color:var(--blue2)}
+textarea.form-inp{resize:vertical;min-height:80px}
+
+/* BUTTONS */
+.btn{padding:10px 22px;border-radius:var(--rsm);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'Poppins',sans-serif;letter-spacing:0.2px;transition:all 0.15s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#0a4a75}
+.btn-secondary{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
+.btn-secondary:hover{background:#f0f7ff}
+.btn-success{background:var(--green);color:#fff}
+.btn-success:hover{background:#549939}
+.btn-danger{background:#e74c3c;color:#fff}
+.btn-danger:hover{background:#c0392b}
+.btn-sm{padding:6px 14px;font-size:11px}
+.btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:18px;padding:28px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;position:relative}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:18px;font-weight:700;color:var(--blue)}
+.modal-close{background:#f0f0f0;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:18px;color:var(--gray);display:flex;align-items:center;justify-content:center;line-height:1}
+.modal-close:hover{background:#e0e0e0}
+
+/* DETAIL VIEW */
+.detail-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:13px;align-items:flex-start}
+.detail-row:last-child{border-bottom:none}
+.detail-key{color:#999;font-weight:500;flex-shrink:0;margin-right:12px}
+.detail-val{color:var(--gray);font-weight:600;text-align:right}
+.notes-box{background:#f8fafc;border-radius:var(--rsm);padding:12px;font-size:13px;color:var(--gray);line-height:1.6;margin-top:12px;border:1px solid #e8edf3}
+.notes-lbl{font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--blue);color:#fff;padding:12px 24px;border-radius:var(--radius);font-size:13px;font-weight:600;z-index:2000;transition:transform 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.2)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* WELCOME */
+.welcome{background:var(--blue);border-radius:var(--radius);padding:20px 24px;color:#fff;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.welcome-title{font-size:18px;font-weight:700}
+.welcome-sub{font-size:12px;opacity:0.8;margin-top:3px}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:30px;color:#bbb;font-size:13px}
+.empty svg{width:40px;height:40px;margin:0 auto 10px;display:block;opacity:0.3}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:8px 10px;font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.6px;border-bottom:2px solid var(--lgray)}
+.tbl td{padding:11px 10px;border-bottom:1px solid #f0f0f0;color:var(--gray);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#fafcff}
+.tbl tr{cursor:pointer}
+
+/* CONFIRM MODAL */
+.confirm-msg{font-size:14px;color:var(--gray);margin-bottom:20px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">KM</div>
+      <div>
+        <div class="topbar-title">Union Health Clinic</div>
+        <div class="topbar-sub">Dr. Kenneth Maima — Private Practice</div>
+      </div>
+    </div>
+    <div class="topbar-date" id="topbar-date"></div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-item active" id="nav-home" onclick="goPage('home')">
+      <span class="nav-icon">🏠</span>Dashboard
+    </div>
+    <div class="nav-item" id="nav-patients" onclick="goPage('patients')">
+      <span class="nav-icon">👥</span>Patients
+    </div>
+    <div class="nav-item" id="nav-appts" onclick="goPage('appts')">
+      <span class="nav-icon">📅</span>Appointments
+    </div>
+    <div class="nav-item" id="nav-finance" onclick="goPage('finance')">
+      <span class="nav-icon">💰</span>Finance
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-home">
+      <div class="welcome">
+        <div>
+          <div class="welcome-title" id="welcome-msg">Good day, Dr. Maima</div>
+          <div class="welcome-sub" id="welcome-date"></div>
+        </div>
+        <div style="font-size:48px;opacity:0.25">🏥</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num" id="s-patients">0</div><div class="stat-lbl">Total Patients</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-upcoming">0</div><div class="stat-lbl">Upcoming Appts</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-today">0</div><div class="stat-lbl">Today's Appts</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-revenue" style="font-size:18px">K0</div><div class="stat-lbl">Net Revenue</div></div>
+      </div>
+
+      <div class="sec-hdr">Quick Actions</div>
+      <div class="qa-grid">
+        <div class="qa-btn" onclick="openModal('m-patient')">
+          <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          <div class="qa-btn-lbl">New Patient</div>
+        </div>
+        <div class="qa-btn" onclick="openModal('m-appt')">
+          <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/></svg>
+          <div class="qa-btn-lbl">Book Appointment</div>
+        </div>
+        <div class="qa-btn" onclick="openModal('m-txn')">
+          <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <div class="qa-btn-lbl">Record Payment</div>
+        </div>
+        <div class="qa-btn" onclick="goPage('appts')">
+          <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div class="qa-btn-lbl">Today's Schedule</div>
+        </div>
+      </div>
+
+      <div class="sec-hdr">Upcoming Appointments</div>
+      <div class="card" id="home-appts"><div class="empty">No upcoming appointments</div></div>
+
+      <div class="sec-hdr">Recent Patients</div>
+      <div class="card" id="home-patients"><div class="empty">No patients registered yet</div></div>
+    </div>
+
+    <!-- PATIENTS -->
+    <div class="page" id="page-patients">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div style="font-size:20px;font-weight:700;color:var(--blue)">Patient Records</div>
+        <button class="btn btn-primary" onclick="openModal('m-patient')">+ Add Patient</button>
+      </div>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="pt-search" placeholder="Search by name or phone..." oninput="renderPatients()">
+      </div>
+      <div class="card" style="padding:0 18px" id="pt-list"><div class="empty">No patients yet. Click "Add Patient" to get started.</div></div>
+    </div>
+
+    <!-- APPOINTMENTS -->
+    <div class="page" id="page-appts">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div style="font-size:20px;font-weight:700;color:var(--blue)">Appointments</div>
+        <button class="btn btn-primary" onclick="openModal('m-appt')">+ Book Appointment</button>
+      </div>
+      <div id="apt-list"></div>
+    </div>
+
+    <!-- FINANCE -->
+    <div class="page" id="page-finance">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div style="font-size:20px;font-weight:700;color:var(--blue)">Financial Records</div>
+        <button class="btn btn-success" onclick="openModal('m-txn')">+ Add Record</button>
+      </div>
+      <div class="fin-banner">
+        <div>
+          <div class="fin-lbl">Net Balance (PGK)</div>
+          <div class="fin-total" id="fin-total">K 0.00</div>
+          <div class="fin-minis">
+            <div class="fin-mini"><div class="fin-mini-num" id="fin-in">K 0</div><div class="fin-mini-lbl">Total Income</div></div>
+            <div class="fin-mini"><div class="fin-mini-num" id="fin-ex">K 0</div><div class="fin-mini-lbl">Total Expenses</div></div>
+            <div class="fin-mini"><div class="fin-mini-num" id="fin-count">0</div><div class="fin-mini-lbl">Transactions</div></div>
+          </div>
+        </div>
+        <div style="font-size:64px;opacity:0.2">💳</div>
+      </div>
+      <div class="sec-hdr">Transaction History</div>
+      <div class="card" style="padding:0 18px" id="txn-list"><div class="empty">No transactions yet.</div></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /app -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL: Add Patient -->
+<div class="modal-overlay" id="m-patient">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">New Patient</div>
+      <button class="modal-close" onclick="closeModal('m-patient')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-grp"><label class="form-lbl">First Name *</label><input class="form-inp" id="p-fn" placeholder="First name"></div>
+      <div class="form-grp"><label class="form-lbl">Last Name *</label><input class="form-inp" id="p-ln" placeholder="Last name"></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-grp"><label class="form-lbl">Date of Birth</label><input class="form-inp" type="date" id="p-dob"></div>
+      <div class="form-grp"><label class="form-lbl">Gender</label><select class="form-inp" id="p-gen"><option value="">Select...</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-grp"><label class="form-lbl">Phone Number</label><input class="form-inp" id="p-ph" placeholder="+675 ..."></div>
+      <div class="form-grp"><label class="form-lbl">Blood Group</label><select class="form-inp" id="p-blood"><option value="">Unknown</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+    </div>
+    <div class="form-grp"><label class="form-lbl">Village / Address</label><input class="form-inp" id="p-addr" placeholder="Village, District, Province"></div>
+    <div class="form-grp"><label class="form-lbl">Emergency Contact</label><input class="form-inp" id="p-emerg" placeholder="Name & phone number"></div>
+    <div class="form-grp"><label class="form-lbl">Medical Notes (allergies, conditions, medications)</label><textarea class="form-inp" id="p-notes" placeholder="Enter any relevant medical history, allergies, current medications..."></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="savePatient()">Save Patient</button>
+      <button class="btn btn-secondary" onclick="closeModal('m-patient')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Add Appointment -->
+<div class="modal-overlay" id="m-appt">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">Book Appointment</div>
+      <button class="modal-close" onclick="closeModal('m-appt')">✕</button>
+    </div>
+    <div class="form-grp"><label class="form-lbl">Patient *</label><select class="form-inp" id="a-pt"><option value="">Select patient...</option></select></div>
+    <div class="form-grid">
+      <div class="form-grp"><label class="form-lbl">Date *</label><input class="form-inp" type="date" id="a-date"></div>
+      <div class="form-grp"><label class="form-lbl">Time</label><input class="form-inp" type="time" id="a-time"></div>
+    </div>
+    <div class="form-grp"><label class="form-lbl">Reason / Purpose</label><input class="form-inp" id="a-reason" placeholder="e.g. Follow-up, Consultation, Check-up..."></div>
+    <div class="form-grp"><label class="form-lbl">Notes</label><textarea class="form-inp" id="a-notes" placeholder="Any additional notes for this appointment..."></textarea></div>
+    <div class="form-grp"><label class="form-lbl">Status</label><select class="form-inp" id="a-status"><option>Scheduled</option><option>Confirmed</option><option>Completed</option><option>Cancelled</option></select></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveAppt()">Book Appointment</button>
+      <button class="btn btn-secondary" onclick="closeModal('m-appt')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Add Transaction -->
+<div class="modal-overlay" id="m-txn">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">Record Transaction</div>
+      <button class="modal-close" onclick="closeModal('m-txn')">✕</button>
+    </div>
+    <div class="form-grp"><label class="form-lbl">Patient (optional)</label><select class="form-inp" id="t-pt"><option value="">General / Clinic</option></select></div>
+    <div class="form-grid">
+      <div class="form-grp"><label class="form-lbl">Type *</label><select class="form-inp" id="t-type"><option value="income">Payment Received</option><option value="expense">Expense / Cost</option></select></div>
+      <div class="form-grp"><label class="form-lbl">Amount (PGK) *</label><input class="form-inp" type="number" id="t-amt" placeholder="0.00" min="0" step="0.01"></div>
+    </div>
+    <div class="form-grp"><label class="form-lbl">Description *</label><input class="form-inp" id="t-desc" placeholder="e.g. Consultation fee, medicine, supplies..."></div>
+    <div class="form-grp"><label class="form-lbl">Date</label><input class="form-inp" type="date" id="t-date"></div>
+    <div class="btn-row">
+      <button class="btn btn-success" onclick="saveTxn()">Save Record</button>
+      <button class="btn btn-secondary" onclick="closeModal('m-txn')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Patient Detail -->
+<div class="modal-overlay" id="m-detail">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-hdr">
+      <div class="modal-title">Patient Record</div>
+      <button class="modal-close" onclick="closeModal('m-detail')">✕</button>
+    </div>
+    <div id="detail-body"></div>
+  </div>
+</div>
+
+<!-- MODAL: Confirm Delete -->
+<div class="modal-overlay" id="m-confirm">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-hdr">
+      <div class="modal-title" style="color:#e74c3c">Confirm Delete</div>
+      <button class="modal-close" onclick="closeModal('m-confirm')">✕</button>
+    </div>
+    <div class="confirm-msg" id="confirm-msg">Are you sure you want to delete this record? This cannot be undone.</div>
+    <div class="btn-row">
+      <button class="btn btn-danger" id="confirm-yes">Yes, Delete</button>
+      <button class="btn btn-secondary" onclick="closeModal('m-confirm')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const DB = {
+  get: k => JSON.parse(localStorage.getItem('uhc_'+k)||'[]'),
+  set: (k,v) => localStorage.setItem('uhc_'+k, JSON.stringify(v))
+};
+let patients = DB.get('patients');
+let appointments = DB.get('appointments');
+let transactions = DB.get('transactions');
+function save() {
+  DB.set('patients', patients);
+  DB.set('appointments', appointments);
+  DB.set('transactions', transactions);
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const COLORS = ['#0D5B8F','#27A2E0','#68B44B','#e67e22','#8e44ad','#c0392b','#16a085'];
+function acolor(n){let s=0;for(let c of n)s+=c.charCodeAt(0);return COLORS[s%COLORS.length];}
+function initials(fn,ln){return((fn||'?')[0]+(ln||'?')[0]).toUpperCase();}
+function fmtDate(d){if(!d)return'—';const p=d.split('-');return p[2]+' '+MONTHS[+p[1]-1]+' '+p[0];}
+function fmtMon(d){if(!d)return'';return MONTHS[+d.slice(5,7)-1];}
+function statusBadge(s){
+  if(s==='Confirmed')return'badge-green';
+  if(s==='Cancelled')return'badge-red';
+  if(s==='Completed')return'badge-blue';
+  return'badge-amber';
+}
+function calcAge(dob){
+  if(!dob)return'';
+  const diff=Date.now()-new Date(dob).getTime();
+  const age=Math.floor(diff/3.15576e10);
+  return age+' yrs';
+}
+
+// ─── TOAST ───────────────────────────────────────────────────────────────────
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ─── MODALS ──────────────────────────────────────────────────────────────────
+function openModal(id){
+  if(id==='m-appt'||id==='m-txn') populateSelects();
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(el=>{
+  el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');});
+});
+function populateSelects(){
+  ['a-pt','t-pt'].forEach(id=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    const def=id==='t-pt'?'<option value="">General / Clinic</option>':'<option value="">Select patient...</option>';
+    sel.innerHTML=def+patients.map(p=>`<option value="${p.id}">${p.firstname} ${p.lastname}</option>`).join('');
+  });
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function goPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.getElementById('nav-'+name).classList.add('active');
+  if(name==='patients')renderPatients();
+  if(name==='appts')renderAppts();
+  if(name==='finance')renderFinance();
+  if(name==='home')renderHome();
+}
+
+// ─── SAVE PATIENT ─────────────────────────────────────────────────────────────
+function savePatient(){
+  const fn=document.getElementById('p-fn').value.trim();
+  const ln=document.getElementById('p-ln').value.trim();
+  if(!fn||!ln){toast('Please enter first and last name');return;}
+  const p={
+    id:'p-'+Date.now(),
+    firstname:fn,lastname:ln,
+    dob:document.getElementById('p-dob').value,
+    gender:document.getElementById('p-gen').value,
+    phone:document.getElementById('p-ph').value.trim(),
+    blood:document.getElementById('p-blood').value,
+    address:document.getElementById('p-addr').value.trim(),
+    emergency:document.getElementById('p-emerg').value.trim(),
+    notes:document.getElementById('p-notes').value.trim(),
+    registered:new Date().toISOString().slice(0,10)
+  };
+  patients.unshift(p);save();
+  closeModal('m-patient');
+  ['p-fn','p-ln','p-ph','p-addr','p-emerg','p-notes'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('p-dob').value='';
+  document.getElementById('p-gen').value='';
+  document.getElementById('p-blood').value='';
+  toast('✓ Patient added: '+fn+' '+ln);
+  renderPatients();renderHome();
+}
+
+// ─── SAVE APPOINTMENT ─────────────────────────────────────────────────────────
+function saveAppt(){
+  const pid=document.getElementById('a-pt').value;
+  const date=document.getElementById('a-date').value;
+  if(!pid||!date){toast('Please select a patient and date');return;}
+  const p=patients.find(x=>x.id===pid)||{};
+  const a={
+    id:'a-'+Date.now(),
+    patientId:pid,
+    patientName:p.firstname+' '+p.lastname,
+    date,
+    time:document.getElementById('a-time').value,
+    reason:document.getElementById('a-reason').value.trim(),
+    notes:document.getElementById('a-notes').value.trim(),
+    status:document.getElementById('a-status').value
+  };
+  appointments.push(a);
+  appointments.sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1);
+  save();
+  closeModal('m-appt');
+  ['a-reason','a-notes','a-date','a-time'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('a-status').value='Scheduled';
+  toast('✓ Appointment booked for '+p.firstname);
+  renderAppts();renderHome();
+}
+
+// ─── SAVE TRANSACTION ─────────────────────────────────────────────────────────
+function saveTxn(){
+  const amt=parseFloat(document.getElementById('t-amt').value);
+  if(!amt||amt<=0){toast('Please enter a valid amount');return;}
+  const desc=document.getElementById('t-desc').value.trim();
+  if(!desc){toast('Please enter a description');return;}
+  const pid=document.getElementById('t-pt').value;
+  const p=pid?patients.find(x=>x.id===pid):null;
+  const t={
+    id:'t-'+Date.now(),
+    patientId:pid||'',
+    patientName:p?p.firstname+' '+p.lastname:'General',
+    type:document.getElementById('t-type').value,
+    amount:amt,
+    desc,
+    date:document.getElementById('t-date').value||new Date().toISOString().slice(0,10)
+  };
+  transactions.unshift(t);save();
+  closeModal('m-txn');
+  document.getElementById('t-amt').value='';
+  document.getElementById('t-desc').value='';
+  document.getElementById('t-pt').value='';
+  toast('✓ Transaction saved: K'+amt.toFixed(2));
+  renderFinance();renderHome();
+}
+
+// ─── RENDER HOME ─────────────────────────────────────────────────────────────
+function renderHome(){
+  const now=new Date();
+  const today=now.toISOString().slice(0,10);
+  const hour=now.getHours();
+  const greeting=hour<12?'Good morning':'hour<17?Good afternoon':'Good evening';
+  document.getElementById('welcome-msg').textContent=(hour<12?'Good morning':hour<17?'Good afternoon':'Good evening')+', Dr. Maima';
+  document.getElementById('welcome-date').textContent=now.toLocaleDateString('en',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('topbar-date').textContent=now.toLocaleDateString('en',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+
+  document.getElementById('s-patients').textContent=patients.length;
+  const upcoming=appointments.filter(a=>a.date>=today&&a.status!=='Cancelled');
+  const todayAppts=appointments.filter(a=>a.date===today&&a.status!=='Cancelled');
+  document.getElementById('s-upcoming').textContent=upcoming.length;
+  document.getElementById('s-today').textContent=todayAppts.length;
+  const inc=transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const exp=transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  document.getElementById('s-revenue').textContent='K'+Math.round(inc-exp).toLocaleString();
+
+  const haEl=document.getElementById('home-appts');
+  const upSlice=upcoming.slice(0,4);
+  haEl.innerHTML=upSlice.length===0?'<div class="empty">No upcoming appointments</div>':
+    upSlice.map(a=>`<div class="appt-item">
+      <div class="appt-box"><div class="appt-day">${a.date.slice(8)}</div><div class="appt-mon">${fmtMon(a.date)}</div></div>
+      <div class="appt-info"><div class="appt-name">${a.patientName}</div><div class="appt-detail">${a.time||'—'} · ${a.reason||'Appointment'}</div></div>
+      <span class="badge ${statusBadge(a.status)}">${a.status}</span>
+    </div>`).join('');
+
+  const hpEl=document.getElementById('home-patients');
+  hpEl.innerHTML=patients.length===0?'<div class="empty">No patients registered yet</div>':
+    patients.slice(0,5).map(p=>`<div class="pt-row" style="cursor:pointer" onclick="showDetail('${p.id}')">
+      <div class="avatar" style="width:38px;height:38px;background:${acolor(p.firstname)};font-size:13px">${initials(p.firstname,p.lastname)}</div>
+      <div class="pt-info"><div class="pt-name">${p.firstname} ${p.lastname}</div><div class="pt-sub">${p.gender||'—'} · ${calcAge(p.dob)||'—'} · ${p.phone||'No phone'}</div></div>
+    </div>`).join('');
+}
+
+// ─── RENDER PATIENTS ─────────────────────────────────────────────────────────
+function renderPatients(){
+  const q=(document.getElementById('pt-search')||{}).value||'';
+  const el=document.getElementById('pt-list');
+  const filtered=patients.filter(p=>(p.firstname+' '+p.lastname).toLowerCase().includes(q.toLowerCase())||(p.phone||'').includes(q)||(p.address||'').toLowerCase().includes(q.toLowerCase()));
+  if(filtered.length===0){el.innerHTML='<div class="empty">No patients found</div>';return;}
+  el.innerHTML=filtered.map(p=>`<div class="pt-row" style="cursor:pointer" onclick="showDetail('${p.id}')">
+    <div class="avatar" style="width:42px;height:42px;background:${acolor(p.firstname)};font-size:14px">${initials(p.firstname,p.lastname)}</div>
+    <div class="pt-info">
+      <div class="pt-name">${p.firstname} ${p.lastname} ${p.blood?'<span class="badge badge-red" style="font-size:9px">'+p.blood+'</span>':''}</div>
+      <div class="pt-sub">${p.gender||'—'} · ${calcAge(p.dob)||'—'} · ${p.phone||'No phone'} · ${p.address||'No address'}</div>
+    </div>
+    <span style="color:#ccc;font-size:18px">›</span>
+  </div>`).join('');
+}
+
+// ─── SHOW PATIENT DETAIL ─────────────────────────────────────────────────────
+function showDetail(id){
+  const p=patients.find(x=>x.id===id);if(!p)return;
+  const patAppts=appointments.filter(a=>a.patientId===id);
+  const patTxns=transactions.filter(t=>t.patientId===id);
+  const totalPaid=patTxns.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  document.getElementById('detail-body').innerHTML=`
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+      <div class="avatar" style="width:60px;height:60px;font-size:20px;background:${acolor(p.firstname)}">${initials(p.firstname,p.lastname)}</div>
+      <div>
+        <div style="font-size:20px;font-weight:700;color:var(--gray)">${p.firstname} ${p.lastname}</div>
+        <div style="font-size:12px;color:#999">Registered: ${fmtDate(p.registered)}</div>
+      </div>
+    </div>
+    <div class="detail-row"><span class="detail-key">Gender</span><span class="detail-val">${p.gender||'—'}</span></div>
+    <div class="detail-row"><span class="detail-key">Date of Birth</span><span class="detail-val">${fmtDate(p.dob)} ${p.dob?'('+calcAge(p.dob)+')':''}</span></div>
+    <div class="detail-row"><span class="detail-key">Blood Group</span><span class="detail-val">${p.blood||'Unknown'}</span></div>
+    <div class="detail-row"><span class="detail-key">Phone</span><span class="detail-val">${p.phone||'—'}</span></div>
+    <div class="detail-row"><span class="detail-key">Address</span><span class="detail-val">${p.address||'—'}</span></div>
+    <div class="detail-row"><span class="detail-key">Emergency Contact</span><span class="detail-val">${p.emergency||'—'}</span></div>
+    <div class="detail-row"><span class="detail-key">Total Payments</span><span class="detail-val" style="color:#2e6b1f">K${totalPaid.toLocaleString()}</span></div>
+    ${p.notes?`<div class="notes-box"><div class="notes-lbl">Medical Notes</div>${p.notes}</div>`:''}
+    <div class="sec-hdr" style="margin-top:18px">Appointments (${patAppts.length})</div>
+    ${patAppts.length===0?'<div class="empty" style="padding:12px">No appointments</div>':
+    patAppts.map(a=>`<div class="appt-item">
+      <div class="appt-box" style="${a.date<new Date().toISOString().slice(0,10)?'background:#888':''}">
+        <div class="appt-day">${a.date.slice(8)}</div><div class="appt-mon">${fmtMon(a.date)}</div>
+      </div>
+      <div class="appt-info"><div class="appt-name">${a.reason||'Appointment'}</div><div class="appt-detail">${a.time||'—'} · ${fmtDate(a.date)}</div></div>
+      <span class="badge ${statusBadge(a.status)}">${a.status}</span>
+    </div>`).join('')}
+    <div class="btn-row">
+      <button class="btn btn-primary btn-sm" onclick="closeModal('m-detail');openModal('m-appt')">+ Book Appointment</button>
+      <button class="btn btn-success btn-sm" onclick="closeModal('m-detail');openModal('m-txn')">+ Record Payment</button>
+      <button class="btn btn-danger btn-sm" onclick="confirmDelete('patient','${p.id}','${p.firstname} ${p.lastname}')">Delete Patient</button>
+    </div>`;
+  openModal('m-detail');
+}
+
+// ─── RENDER APPOINTMENTS ─────────────────────────────────────────────────────
+function renderAppts(){
+  const el=document.getElementById('apt-list');
+  if(appointments.length===0){el.innerHTML='<div class="card"><div class="empty">No appointments booked yet</div></div>';return;}
+  const today=new Date().toISOString().slice(0,10);
+  const upcoming=appointments.filter(a=>a.date>=today);
+  const past=appointments.filter(a=>a.date<today).slice(0,20);
+  let html='';
+  if(upcoming.length){
+    html+=`<div class="sec-hdr">Upcoming (${upcoming.length})</div><div class="card" style="padding:0 18px">`;
+    html+=upcoming.map(a=>`<div class="appt-item">
+      <div class="appt-box"><div class="appt-day">${a.date.slice(8)}</div><div class="appt-mon">${fmtMon(a.date)}</div></div>
+      <div class="appt-info"><div class="appt-name">${a.patientName}</div><div class="appt-detail">${a.time||'—'} · ${a.reason||'Appointment'}${a.notes?' · '+a.notes:''}</div></div>
+      <span class="badge ${statusBadge(a.status)}">${a.status}</span>
+    </div>`).join('');
+    html+=`</div>`;
+  }
+  if(past.length){
+    html+=`<div class="sec-hdr">Past</div><div class="card" style="padding:0 18px;opacity:0.7">`;
+    html+=past.map(a=>`<div class="appt-item">
+      <div class="appt-box" style="background:#888"><div class="appt-day">${a.date.slice(8)}</div><div class="appt-mon">${fmtMon(a.date)}</div></div>
+      <div class="appt-info"><div class="appt-name">${a.patientName}</div><div class="appt-detail">${a.time||'—'} · ${a.reason||'Appointment'}</div></div>
+      <span class="badge ${statusBadge(a.status)}">${a.status}</span>
+    </div>`).join('');
+    html+=`</div>`;
+  }
+  el.innerHTML=html;
+}
+
+// ─── RENDER FINANCE ───────────────────────────────────────────────────────────
+function renderFinance(){
+  const inc=transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const exp=transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  document.getElementById('fin-total').textContent='K '+(inc-exp).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('fin-in').textContent='K '+inc.toLocaleString();
+  document.getElementById('fin-ex').textContent='K '+exp.toLocaleString();
+  document.getElementById('fin-count').textContent=transactions.length;
+  const el=document.getElementById('txn-list');
+  el.innerHTML=transactions.length===0?'<div class="empty">No transactions yet</div>':
+    transactions.map(t=>`<div class="txn-row">
+      <div>
+        <div class="txn-name">${t.desc}</div>
+        <div class="txn-sub">${t.patientName} · ${fmtDate(t.date)}</div>
+      </div>
+      <div class="txn-amt ${t.type==='income'?'txn-pos':'txn-neg'}">${t.type==='income'?'+':'-'}K${t.amount.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+    </div>`).join('');
+}
+
+// ─── DELETE ───────────────────────────────────────────────────────────────────
+let _pendingDelete = null;
+function confirmDelete(type, id, name){
+  document.getElementById('confirm-msg').textContent=`Delete "${name}"? This cannot be undone.`;
+  document.getElementById('confirm-yes').onclick=()=>doDelete(type,id);
+  closeModal('m-detail');
+  openModal('m-confirm');
+}
+function doDelete(type,id){
+  if(type==='patient'){
+    patients=patients.filter(x=>x.id!==id);
+    appointments=appointments.filter(x=>x.patientId!==id);
+    transactions=transactions.filter(x=>x.patientId!==id);
+    save();toast('Patient deleted');renderPatients();renderHome();
+  }
+  closeModal('m-confirm');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+document.getElementById('t-date').value=new Date().toISOString().slice(0,10);
+renderHome();
+</script>
+</body>
+</html>
